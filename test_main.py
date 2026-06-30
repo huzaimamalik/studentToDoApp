@@ -1,6 +1,6 @@
-from fastapi.testclient import testClient
+from fastapi.testclient import TestClient
 from main import app
-client = testClient(app)
+client = TestClient(app)
 
 def testGetAllTasks():
     response = client.get("/tasks")

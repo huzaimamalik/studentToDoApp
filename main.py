@@ -7,14 +7,14 @@ tasks_db = {
     3: {"title": "Write deadlock recovery simulation in C", "status": "Pending"}
 }
 
-class taskUpdate(baseModel)
+class taskUpdate(baseModel):
     status: str
 @app.get("/tasks")
 def getAllTasks():
     return tasks_db
 
 @app.put("/tasks/{task_id}")
-def updateTaskStatus(task_id: int, taskUpdatee: taskUpdate)
+def updateTaskStatus(task_id: int, taskUpdatee: taskUpdate):
     if task_id not in tasks_db:
         raise HTTPException(status_code=404, detail="Task not found")
     validStatuses = ["Pending", "Done", "Procrastinating"]
