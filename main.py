@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import baseModel
+from pydantic import BaseModel
 app = FastAPI()
 tasks_db = {
     1: {"title": "Finish Database Normalization Assignment", "status": "Done"},
@@ -7,7 +7,7 @@ tasks_db = {
     3: {"title": "Write deadlock recovery simulation in C", "status": "Pending"}
 }
 
-class taskUpdate(baseModel):
+class taskUpdate(BaseModel):
     status: str
 @app.get("/tasks")
 def getAllTasks():
