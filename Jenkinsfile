@@ -1,31 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage('Setup Environment') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Creating Python Virtual Environment...'
-                sh 'python3 -m venv venv'
-                echo 'Installing Dependencies...'
-                sh './venv/bin/pip install -r requirements.txt'
+                echo 'Packaging the app into a Docker Image...'
+                sh 'docker built -t todo-fastapi-app .'
             }
         }
-        stage('Run Unit Tests') {
+        stage('Deploy Container') {
             steps {
-                echo 'Running the tests...'
-                sh './venv/bin/pytest test_main.py -v'
+                echo 'Starting the live server...'
+                sh 'docker rm -f my-live-app || true'
+                sh 'docker run -d -p 8000:8000 --name my-live-app todo-fastapi-app'
             }
-        }
-    }
-    post {
-        always {
-            echo 'Cleaning...'
-            sh 'rm -rf venv'
-        }
-        success {
-            echo 'Success: All tests passed! The API is working perfectly!'
-        }
-        failure {
-            echo 'Failed: Check Logs to see what went wrong!'
         }
     }
 }
