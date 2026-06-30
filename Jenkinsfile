@@ -4,7 +4,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Packaging the app into a Docker Image...'
-                sh 'docker built -t todo-fastapi-app .'
+                sh 'docker build -t todo-fastapi-app .'
             }
         }
         stage('Deploy Container') {
