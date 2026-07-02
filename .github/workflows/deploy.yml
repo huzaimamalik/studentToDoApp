@@ -16,9 +16,9 @@ jobs:
       - name: Execute Remote SSH Deployment
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VM_IP_ADDRESS }}
-          username: ${{ secrets.VM_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.VM_IP }}
+          username: ${{ secrets.VM_UserName }}
+          key: ${{ secrets.SSH_PrivateKey }}
           script: |
             cd /home/huz/studentToDo 
             
