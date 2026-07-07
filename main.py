@@ -22,3 +22,11 @@ def updateTaskStatus(task_id: int, taskUpdatee: taskUpdate):
         raise HTTPException(status_code=400, detail="Invalid Status")
     tasks_db[task_id]["status"]=taskUpdatee.status
     return{"message": "Status Updated", "task": tasks_db[task_id]}
+
+class TaskCreate(BaseModel):
+    title: str
+    completed: bool = False
+
+@app.post("/tasks", status_code=201)
+def create_task(task: TaskCreate):
+    return {"message": "Task created successfully", "task": task}
