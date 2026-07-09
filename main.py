@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-
+import asyncio
 app = FastAPI()
 
 app.add_middleware(
@@ -43,7 +43,8 @@ class TaskCreate(BaseModel):
     completed: bool = False
 
 @app.post("/tasks", status_code=201)
-def create_task(task: TaskCreate):
+async def create_task(task: TaskCreate):
+    await asyncio.sleep(3)
     new_id = max(tasks_db.keys(), default=0) + 1
     tasks_db[new_id] = {"title": task.title, "status": "Pending"}
     
