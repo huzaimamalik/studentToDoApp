@@ -59,3 +59,9 @@ def login(credentials: LoginCredentials, response: Response):
     
     response.set_cookie(key="active_user", value=credentials.username, httponly=True)
     return {"message": f"Welcome, {credentials.username}! Cookie dropped."}
+
+@app.get("/whoami")
+def check_user(active_user: str | None = Cookie(default=None)):
+    if active_user:
+        return {"user": active_user} # Return clean data
+    return {"user": None}
