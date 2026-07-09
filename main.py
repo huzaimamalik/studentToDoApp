@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -48,3 +48,14 @@ def create_task(task: TaskCreate):
     tasks_db[new_id] = {"title": task.title, "status": "Pending"}
     
     return {"message": "Task created successfully", "task": tasks_db[new_id]}
+
+@app.post("/login")
+def login(response: Response):
+    response.set_cookie(key="active_user", value="huz", httponly=True)
+    return {"message": "Cookie set successfully!"}
+
+@app.get("/whoami")
+def check_user(active_user: str | None = Cookie(default=None)):
+    if active_user:
+        return {"message": f"Welcome back, {active_user}!"}
+    return {"message": "No cookie found. Who are you?"}
