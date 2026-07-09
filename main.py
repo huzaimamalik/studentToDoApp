@@ -1,14 +1,27 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 tasks_db = {
     1: {"title": "Finish Database Normalization Assignment", "status": "Done"},
     2: {"title": "Study for COAL Exam", "status": "Procrastinating"},
     3: {"title": "Write deadlock recovery simulation in C", "status": "Pending"}
 }
-'''Huzaima'''
+
+'''huz'''
 class taskUpdate(BaseModel):
     status: str
+
 @app.get("/tasks")
 def getAllTasks():
     return tasks_db
@@ -17,11 +30,13 @@ def getAllTasks():
 def updateTaskStatus(task_id: int, taskUpdatee: taskUpdate):
     if task_id not in tasks_db:
         raise HTTPException(status_code=404, detail="Task not found")
+    
     validStatuses = ["Pending", "Done", "Procrastinating"]
     if taskUpdatee.status not in validStatuses:
         raise HTTPException(status_code=400, detail="Invalid Status")
-    tasks_db[task_id]["status"]=taskUpdatee.status
-    return{"message": "Status Updated", "task": tasks_db[task_id]}
+    
+    tasks_db[task_id]["status"] = taskUpdatee.status
+    return {"message": "Status Updated", "task": tasks_db[task_id]}
 
 class TaskCreate(BaseModel):
     title: str
@@ -29,4 +44,7 @@ class TaskCreate(BaseModel):
 
 @app.post("/tasks", status_code=201)
 def create_task(task: TaskCreate):
-    return {"message": "Task created successfully", "task": task}
+    new_id = max(tasks_db.keys(), default=0) + 1
+    tasks_db[new_id] = {"title": task.title, "status": "Pending"}
+    
+    return {"message": "Task created successfully", "task": tasks_db[new_id]}
