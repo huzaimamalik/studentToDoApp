@@ -54,7 +54,7 @@ class LoginCredentials(BaseModel):
 
 @app.post("/login")
 def login(credentials: LoginCredentials, response: Response):
-    if credentials.password != "secret123":
+    if credentials.password != "Huzaima123":
         raise HTTPException(status_code=401, detail="Invalid password!")
     
     response.set_cookie(key="active_user", value=credentials.username, httponly=True)
