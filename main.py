@@ -48,14 +48,14 @@ def create_task(task: TaskCreate):
     tasks_db[new_id] = {"title": task.title, "status": "Pending"}
     
     return {"message": "Task created successfully", "task": tasks_db[new_id]}
+class LoginCredentials(BaseModel):
+    username: str
+    password: str
 
 @app.post("/login")
-def login(response: Response):
-    response.set_cookie(key="active_user", value="huz", httponly=True)
-    return {"message": "Cookie set successfully!"}
-
-@app.get("/whoami")
-def check_user(active_user: str | None = Cookie(default=None)):
-    if active_user:
-        return {"message": f"Welcome back, {active_user}!"}
-    return {"message": "No cookie found. Who are you?"}
+def login(credentials: LoginCredentials, response: Response):
+    if credentials.password != "secret123":
+        raise HTTPException(status_code=401, detail="Invalid password!")
+    
+    response.set_cookie(key="active_user", value=credentials.username, httponly=True)
+    return {"message": f"Welcome, {credentials.username}! Cookie dropped."}
