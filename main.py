@@ -4,6 +4,16 @@ from pydantic import BaseModel
 import asyncio
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://huzaimafastapi.com"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 tasks_db = {
     1: {"title": "Finish Database Normalization Assignment", "status": "Done"},
     2: {"title": "Study for COAL Exam", "status": "Procrastinating"},
